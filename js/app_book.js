@@ -5,16 +5,23 @@ function fetchBookData(callback, element) {
             var obj = [];
             snap.forEach(function (childSnap) {
                 var c2 = childSnap.val();
+
+                //  Load genre data
                 var genreDataRef = firebase.database().ref('demofb').child('genre').child(c2.genre);
                 var genreName;
                 genreDataRef.once('value', function (snap2) {
                     var c3 = snap2.val();
                     genreName = c3.name;
                 });
-                var obj2 = {'isbn': c2.isbn, 'title': c2.title, 'author': c2.author, 'genre': genreName};
-                obj.push(obj2);
+
+                //  Get url from storage
+                var storage = firebase.storage().ref('cover').child(c2.cover);
+                storage.getDownloadURL().then(function (url) {
+                    var obj2 = {'cover': url, 'isbn': c2.isbn, 'title': c2.title, 'author': c2.author, 'genre': genreName};
+                    obj.push(obj2);
+                    callback(element, obj);
+                });
             });
-            callback(element, obj);
         }
     });
 }

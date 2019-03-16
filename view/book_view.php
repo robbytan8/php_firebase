@@ -27,6 +27,7 @@
 <table id="bookTable" class="display">
     <thead>
         <tr>
+            <th>Cover</th>
             <th>ISBN</th>
             <th>Title</th>
             <th>Author</th>
@@ -51,6 +52,12 @@
         $(document).ready(function () {
             $('#bookTable').DataTable({
                 columns: [
+                    {
+                        data: 'null',
+                        render: function (data, type, row) {
+                            return '<img src="' + row.cover + '" alt="book cover" class="book-cover">';
+                        }
+                    },
                     {data: 'isbn'},
                     {data: 'title'},
                     {data: 'author'},
